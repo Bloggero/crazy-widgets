@@ -1,0 +1,388 @@
+/* ==========================================================================
+   SWORD ART ONLINE (SAO) UI THEME — HIGH CONTRAST, COMPACT & NO-SCROLL
+   Aincrad System Menu & HUD Interface
+   ========================================================================== */
+
+QWidget {
+    color: #F8FAFC;
+    font-family: "Segoe UI", "Inter", "Orbitron", -apple-system, sans-serif;
+    font-size: 11px;
+}
+
+/* Main Container Plate (Solid Obsidian Plate) */
+#MainContainer {
+    background-color: #0C1017;
+    border: 2px solid #00E5FF;
+    border-radius: 6px;
+}
+
+#CompactContainer {
+    background-color: #0C1017;
+    border: 2px solid #FF7800;
+    border-radius: 6px;
+}
+
+/* Header Bar */
+#HeaderBar {
+    background-color: #131924;
+    border-bottom: 2px solid #00E5FF;
+    padding: 5px 10px;
+}
+
+#AppTitle {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    color: #00E5FF;
+    background: transparent;
+}
+
+/* SAO Square/Chamfered Header Action Buttons */
+QPushButton#HeaderBtn {
+    background-color: #1A2333;
+    border: 1px solid #00E5FF;
+    border-radius: 3px;
+    padding: 1px;
+    color: #00E5FF;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+QPushButton#HeaderBtn:hover {
+    background-color: #FF7800;
+    border-color: #FFA500;
+    color: #FFFFFF;
+}
+
+QPushButton#CloseBtn {
+    background-color: #26151B;
+    border: 1px solid #FF3344;
+    border-radius: 3px;
+    padding: 1px;
+    color: #FF3344;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+QPushButton#CloseBtn:hover {
+    background-color: #FF3344;
+    border-color: #FFA500;
+    color: #FFFFFF;
+}
+
+/* Player Info Sub-header */
+#UserBar {
+    background-color: #101622;
+    border-bottom: 1px solid #1E2A3C;
+    padding: 4px 10px;
+}
+
+#UserNameLabel {
+    font-size: 11px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+    background: transparent;
+}
+
+#TierBadge {
+    font-size: 10px;
+    font-weight: 900;
+    color: #FF7800;
+    background-color: #211612;
+    border: 1px solid #FF7800;
+    border-radius: 3px;
+    padding: 1px 6px;
+    letter-spacing: 1px;
+}
+
+/* SAO Cards Container */
+#CardsContainer {
+    background-color: #0C1017;
+}
+
+/* SAO Compact Quota Card (Solid Dark Slate with Cyan Accent) */
+.BucketCard {
+    background-color: #141B27;
+    border: 1px solid #1E2D42;
+    border-left: 3px solid #00E5FF;
+    border-radius: 3px;
+    padding: 6px 10px;
+}
+
+.BucketTitle {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+    background: transparent;
+    text-transform: uppercase;
+}
+
+.BucketReset {
+    font-size: 9px;
+    font-weight: 700;
+    color: #00E5FF;
+    background-color: #0D1D28;
+    border: 1px solid #00E5FF;
+    border-radius: 2px;
+    padding: 1px 5px;
+    letter-spacing: 0.5px;
+}
+
+/* SAO Health Badges */
+.BadgeNormal {
+    color: #00FF88;
+    background-color: #0B2418;
+    border: 1px solid #00FF88;
+    border-radius: 2px;
+    font-weight: 900;
+    font-size: 9px;
+    padding: 1px 5px;
+    letter-spacing: 0.5px;
+}
+
+.BadgeWarning {
+    color: #FFB703;
+    background-color: #291E08;
+    border: 1px solid #FFB703;
+    border-radius: 2px;
+    font-weight: 900;
+    font-size: 9px;
+    padding: 1px 5px;
+    letter-spacing: 0.5px;
+}
+
+.BadgeCritical {
+    color: #FF3344;
+    background-color: #2D0F14;
+    border: 1px solid #FF3344;
+    border-radius: 2px;
+    font-weight: 900;
+    font-size: 9px;
+    padding: 1px 5px;
+    letter-spacing: 0.5px;
+}
+
+/* Model Drawer */
+#ModelDrawer {
+    background-color: #0A0E15;
+    border: 1px solid #1E2D42;
+    border-radius: 3px;
+    padding: 4px;
+    margin-top: 4px;
+}
+
+.ModelItemLabel {
+    font-size: 10px;
+    color: #94A3B8;
+    background: transparent;
+    padding: 1px 0;
+}
+
+.ModelItemLabel:hover {
+    color: #00E5FF;
+}
+
+/* SAO Orange Sync Action Button */
+QPushButton.PrimaryBtn, QPushButton#SyncBtn {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FF8C00,
+        stop:1 #D95400);
+    border: 1px solid #FFA500;
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+}
+
+QPushButton.PrimaryBtn:hover, QPushButton#SyncBtn:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFA500,
+        stop:1 #FF6600);
+    border-color: #FFFFFF;
+}
+
+QPushButton.PrimaryBtn:pressed, QPushButton#SyncBtn:pressed {
+    background: #B33E00;
+}
+
+/* SAO Secondary Button */
+QPushButton.SecondaryBtn {
+    background-color: #1A2333;
+    border: 1px solid #00E5FF;
+    border-radius: 4px;
+    color: #00E5FF;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    padding: 5px 10px;
+}
+
+QPushButton.SecondaryBtn:hover {
+    background-color: #FF7800;
+    border-color: #FFA500;
+    color: #FFFFFF;
+}
+
+/* Footer Bar */
+#FooterBar {
+    background-color: #101622;
+    border-top: 1px solid #00E5FF;
+    padding: 5px 10px;
+}
+
+/* Error Banner */
+#ErrorBanner {
+    background-color: #2D0F14;
+    border: 1px solid #FF3344;
+    border-left: 4px solid #FF3344;
+    border-radius: 3px;
+    padding: 6px 10px;
+    color: #FCA5A5;
+    font-weight: 700;
+    font-size: 10px;
+}
+
+/* Dialogs */
+QDialog {
+    background-color: #0C1017;
+    border: 2px solid #00E5FF;
+    color: #F8FAFC;
+}
+
+QGroupBox {
+    border: 1px solid #00E5FF;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding-top: 12px;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #00E5FF;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 4px;
+    background-color: #0C1017;
+}
+
+QCheckBox {
+    spacing: 8px;
+    color: #F1F5F9;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+QCheckBox::indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid #00E5FF;
+    background-color: #141B27;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #FF7800;
+    border-color: #FFA500;
+}
+
+QSlider::groove:horizontal {
+    height: 5px;
+    background-color: #1A2333;
+    border: 1px solid #00E5FF;
+    border-radius: 2px;
+}
+
+QSlider::sub-page:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #00E5FF, stop:1 #FF7800);
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #FFFFFF;
+    border: 2px solid #FF7800;
+    width: 12px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+    border-radius: 2px;
+}
+
+/* ==========================================================================
+   COMBOBOX & POPUP DROPDOWN (HIGH CONTRAST SAO DARK STYLING)
+   ========================================================================== */
+QComboBox {
+    background-color: #141B27;
+    border: 1px solid #00E5FF;
+    border-radius: 3px;
+    padding: 4px 8px;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 11px;
+}
+
+QComboBox:focus, QComboBox:on {
+    border: 1px solid #FF7800;
+    background-color: #182232;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 22px;
+    border-left: 1px solid #00E5FF;
+    background-color: #1A2333;
+}
+
+QComboBox::down-arrow {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #00E5FF;
+}
+
+/* Dropdown list popup */
+QComboBox QAbstractItemView {
+    background-color: #0C1017;
+    border: 2px solid #00E5FF;
+    border-radius: 3px;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 11px;
+    outline: 0;
+    padding: 2px;
+    selection-background-color: #FF7800;
+    selection-color: #FFFFFF;
+}
+
+QComboBox QAbstractItemView::item {
+    background-color: #0C1017;
+    color: #FFFFFF;
+    min-height: 24px;
+    padding-left: 6px;
+    border-bottom: 1px solid #161F2E;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #FF7800;
+    color: #FFFFFF;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background-color: #FF7800;
+    color: #FFFFFF;
+}
+
+QSpinBox {
+    background-color: #141B27;
+    border: 1px solid #00E5FF;
+    border-radius: 3px;
+    padding: 4px 8px;
+    color: #FFFFFF;
+    font-weight: 700;
+}

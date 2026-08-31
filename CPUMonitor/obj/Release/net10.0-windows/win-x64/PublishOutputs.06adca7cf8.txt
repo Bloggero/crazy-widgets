@@ -1,0 +1,2 @@
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\dist\CPUMonitor.pdb
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\dist\CPUMonitor.exe

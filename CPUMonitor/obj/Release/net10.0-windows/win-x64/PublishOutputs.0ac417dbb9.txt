@@ -1,0 +1,9 @@
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\CPUMonitor.pdb
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\D3DCompiler_47_cor3.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\PenImc_cor3.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\PresentationNative_cor3.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\vcruntime140_cor3.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\wpfgfx_cor3.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\MonoPosixHelper.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\libMonoPosixHelper.dll
+C:\Users\Anthony\Documents\Proyectos\CPUMonitor\publish\CPUMonitor.exe
