@@ -142,8 +142,15 @@
                                    FontWeight="Normal"
                                    Margin="0,0,0,10"/>
 
+                        <CheckBox x:Name="MonthlyNetworkCheck"
+                                  Content="Mostrar consumo de red de los últimos 30 días"
+                                  Foreground="#1F2937"
+                                  FontSize="13"
+                                  FontWeight="Normal"
+                                  Margin="0,0,0,8"/>
+
                         <CheckBox x:Name="NetworkCheck"
-                                  Content="Mostrar consumo de red"
+                                  Content="Mostrar velocidad de red en tiempo real"
                                   Foreground="#1F2937"
                                   FontSize="13"
                                   FontWeight="Normal"

@@ -203,7 +203,7 @@ public sealed class PerformanceMonitor : IDisposable
     }
 
     // =========================================
-    // RED USAGE
+    // RED USAGE (TIEMPO REAL)
     // =========================================
     private void GetNetworkUsage(out double downloadMbps, out double uploadMbps)
     {
@@ -259,6 +259,97 @@ public sealed class PerformanceMonitor : IDisposable
             downloadMbps = 0;
             uploadMbps = 0;
         }
+    }
+
+    // =========================================
+    // CONSUMO DE RED DE LOS ÚLTIMOS 30 DÍAS
+    // =========================================
+    public static async Task<MonthlyNetworkStats> GetLast30DaysNetworkUsageAsync()
+    {
+        double totalDownloadBytes = 0;
+        double totalUploadBytes = 0;
+        var profileDetails = new List<string>();
+
+        try
+        {
+            var endTime = DateTimeOffset.Now;
+            var startTime = endTime.AddDays(-30);
+
+            var usageStates = new Windows.Networking.Connectivity.NetworkUsageStates
+            {
+                Roaming = Windows.Networking.Connectivity.TriStates.DoNotCare,
+                Shared = Windows.Networking.Connectivity.TriStates.DoNotCare
+            };
+
+            var profiles = Windows.Networking.Connectivity.NetworkInformation.GetConnectionProfiles();
+
+            if (profiles != null)
+            {
+                foreach (var profile in profiles)
+                {
+                    try
+                    {
+                        var usages = await profile.GetNetworkUsageAsync(
+                            startTime,
+                            endTime,
+                            Windows.Networking.Connectivity.DataUsageGranularity.Total,
+                            usageStates);
+
+                        ulong profileRx = 0;
+                        ulong profileTx = 0;
+
+                        if (usages != null)
+                        {
+                            foreach (var usage in usages)
+                            {
+                                profileRx += usage.BytesReceived;
+                                profileTx += usage.BytesSent;
+                            }
+                        }
+
+                        if (profileRx > 0 || profileTx > 0)
+                        {
+                            totalDownloadBytes += profileRx;
+                            totalUploadBytes += profileTx;
+
+                            double pRxGb = profileRx / (1024.0 * 1024 * 1024);
+                            double pTxGb = profileTx / (1024.0 * 1024 * 1024);
+                            double pTotalGb = pRxGb + pTxGb;
+                            profileDetails.Add($"• {profile.ProfileName}: {FormatDataSize(pTotalGb)} (↓{FormatDataSize(pRxGb)} / ↑{FormatDataSize(pTxGb)})");
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+        catch
+        {
+        }
+
+        double totalDlGb = totalDownloadBytes / (1024.0 * 1024 * 1024);
+        double totalUlGb = totalUploadBytes / (1024.0 * 1024 * 1024);
+        double totalGb = totalDlGb + totalUlGb;
+
+        string tooltip = $"Red (30 días):\nTotal: {FormatDataSize(totalGb)}\n↓ Descarga: {FormatDataSize(totalDlGb)}\n↑ Subida: {FormatDataSize(totalUlGb)}";
+        if (profileDetails.Count > 0)
+        {
+            tooltip += "\n\nPor interfaz:\n" + string.Join("\n", profileDetails);
+        }
+
+        return new MonthlyNetworkStats(totalDlGb, totalUlGb, totalGb, tooltip);
+    }
+
+    public static string FormatDataSize(double gigabytes)
+    {
+        if (gigabytes < 0.001)
+            return "0.0 MB";
+        if (gigabytes < 1.0)
+            return $"{gigabytes * 1024:0.0} MB";
+        if (gigabytes >= 1000)
+            return $"{gigabytes / 1024:0.2} TB";
+        return $"{gigabytes:0.1} GB";
     }
 
     // =========================================
@@ -587,6 +678,12 @@ public readonly record struct PerformanceStats(
     double DownloadMbps,
     double UploadMbps,
     double DiskUsage);
+
+public readonly record struct MonthlyNetworkStats(
+    double DownloadGb,
+    double UploadGb,
+    double TotalGb,
+    string DetailsTooltip);
 
 // =============================================
 // VISITOR REUTILIZABLE (ZERO ALLOC)

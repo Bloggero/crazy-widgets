@@ -47,6 +47,9 @@ public partial class SettingsWindow : Window
             ShowDisk =
                 settings.ShowDisk,
 
+            ShowMonthlyNetwork =
+                settings.ShowMonthlyNetwork,
+
             Theme =
                 settings.Theme
         };
@@ -76,6 +79,9 @@ public partial class SettingsWindow : Window
         {
             ThemeComboBox.SelectedIndex = 0;
         }
+
+        MonthlyNetworkCheck.IsChecked =
+            Settings.ShowMonthlyNetwork;
 
         NetworkCheck.IsChecked =
             Settings.ShowNetwork;
@@ -280,6 +286,9 @@ public partial class SettingsWindow : Window
 
         Settings.ShowDisk =
             DiskCheck.IsChecked == true;
+
+        Settings.ShowMonthlyNetwork =
+            MonthlyNetworkCheck.IsChecked == true;
 
         if (ThemeComboBox.SelectedItem is System.Windows.Controls.ComboBoxItem selectedTheme &&
             selectedTheme.Tag is string themeTag)

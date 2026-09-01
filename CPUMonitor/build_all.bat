@@ -31,11 +31,11 @@ if exist publish rd /s /q publish
 if "%OPT%"=="2" (
     echo.
     echo [INFO] Compilando version Ligera (Framework-Dependent Single-File)...
-    dotnet publish CPUMonitor.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:SatelliteResourceLanguages="en-US;es" -o publish
+    dotnet publish CPUMonitor.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
 ) else (
     echo.
     echo [INFO] Compilando version Standalone (Self-Contained Single-File)...
-    dotnet publish CPUMonitor.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:SatelliteResourceLanguages="en-US;es" -o publish
+    dotnet publish CPUMonitor.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
 )
 
 if %ERRORLEVEL% EQU 0 (

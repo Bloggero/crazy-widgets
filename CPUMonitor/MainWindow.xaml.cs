@@ -22,6 +22,8 @@ public partial class MainWindow : Window
     private bool _allowClose;
     private bool _settingsOpen;
     private bool _isUpdating;
+    private DateTime _lastMonthlyUpdate = DateTime.MinValue;
+    private bool _hasMonthlyData;
 
     public MainWindow()
     {
@@ -82,6 +84,13 @@ public partial class MainWindow : Window
     // =========================================
     private async void Timer_Tick(object? sender, EventArgs e)
     {
+        if (_settings.ShowMonthlyNetwork &&
+            ((DateTime.UtcNow - _lastMonthlyUpdate).TotalSeconds >= 30 || !_hasMonthlyData))
+        {
+            _lastMonthlyUpdate = DateTime.UtcNow;
+            _ = UpdateMonthlyNetworkStatsAsync();
+        }
+
         if (_isUpdating)
             return;
 
@@ -134,6 +143,26 @@ public partial class MainWindow : Window
         finally
         {
             _isUpdating = false;
+        }
+    }
+
+    // =========================================
+    // RED 30 DÍAS
+    // =========================================
+    private async Task UpdateMonthlyNetworkStatsAsync()
+    {
+        try
+        {
+            var stats = await PerformanceMonitor.GetLast30DaysNetworkUsageAsync();
+            _hasMonthlyData = true;
+
+            MonthlyNetworkTotalText.Text = PerformanceMonitor.FormatDataSize(stats.TotalGb);
+            MonthlyDownloadText.Text = $"↓ Descarga: {PerformanceMonitor.FormatDataSize(stats.DownloadGb)}";
+            MonthlyUploadText.Text = $"↑ Subida: {PerformanceMonitor.FormatDataSize(stats.UploadGb)}";
+            MonthlyNetworkContainer.ToolTip = stats.DetailsTooltip;
+        }
+        catch
+        {
         }
     }
 
@@ -196,12 +225,22 @@ public partial class MainWindow : Window
             ThemeBackgroundContainer.Visibility = Visibility.Visible;
             RootBorder.Background = new SolidColorBrush(Color.FromArgb(0xFA, 0x0A, 0x0E, 0x1A));
             RootBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(0xCC, 0x38, 0x9B, 0xEC));
+            if (MonthlyNetworkContainer != null)
+            {
+                MonthlyNetworkContainer.Background = new SolidColorBrush(Color.FromArgb(0x80, 0x0A, 0x14, 0x2A));
+                MonthlyNetworkContainer.BorderBrush = new SolidColorBrush(Color.FromArgb(0x66, 0x38, 0x9B, 0xEC));
+            }
         }
         else
         {
             ThemeBackgroundContainer.Visibility = Visibility.Collapsed;
             RootBorder.Background = new SolidColorBrush(Color.FromArgb(0xE6, 0x11, 0x11, 0x11));
             RootBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(0x55, 0xFF, 0xFF, 0xFF));
+            if (MonthlyNetworkContainer != null)
+            {
+                MonthlyNetworkContainer.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x14, 0x14, 0x14));
+                MonthlyNetworkContainer.BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x2E, 0x2E, 0x2E));
+            }
         }
     }
 
@@ -210,6 +249,13 @@ public partial class MainWindow : Window
     // =========================================
     private void UpdateIndicatorLayout()
     {
+        if (MonthlyNetworkContainer != null)
+        {
+            MonthlyNetworkContainer.Visibility = _settings.ShowMonthlyNetwork
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
         if (NetworkPanel == null || DiskPanel == null)
             return;
 

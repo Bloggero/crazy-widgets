@@ -25,6 +25,8 @@ public sealed class AppSettings
 
     public bool ShowDisk { get; set; } = true;
 
+    public bool ShowMonthlyNetwork { get; set; } = true;
+
 
     // =========================================
     // TEMA
