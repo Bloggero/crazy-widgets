@@ -1,0 +1,12 @@
+## .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+[Pp]ublish*/
+publish/
+*.user
+*.userosscache
+*.suo
+.vs/
+*.lock.json
+*.nuget.props
+*.nuget.targets

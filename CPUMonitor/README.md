@@ -1,78 +1,53 @@
-# CPU Monitor para Windows
+# CPU & Hardware Monitor para Windows
 
-Widget ligero para Windows hecho con C# + WPF + .NET.
+Widget de escritorio ultra-ligero y moderno para Windows desarrollado en C# + WPF + .NET.
+
+---
 
 ## Características
 
-- Monitor de CPU.
-- Monitor de RAM.
-- Ventana sin bordes.
-- Transparencia configurable.
-- Siempre encima configurable.
-- Se puede mover arrastrándolo.
-- Atajo global configurable para mostrar/ocultar.
-- Inicio automático con Windows.
-- Configuración guardada en `%APPDATA%\CPUMonitor\settings.json`.
-- No utiliza Electron.
-- No necesita conexión a Internet para funcionar.
+- **Monitor de CPU en Tiempo Real:** Porcentaje de uso global.
+- **Monitor de Temperatura Multi-Fuente:**
+  - Soporta Intel (Core / Package / Core Max) y AMD Ryzen (Tctl / Tdie / CCD).
+  - Soporta GPU (NVIDIA, AMD Radeon, Intel Arc) y Placa Base (SuperIO).
+  - Fallback automático a WMI (`MSAcpi_ThermalZoneTemperature` y contadores ACPI).
+  - Colores dinámicos según el umbral térmico (Normal, >70°C Templado, >85°C Alerta).
+- **Monitor de RAM:** Porcentaje de uso y memoria exacta en GB utilizados / totales.
+- **Monitor de Red y Disco:** Descarga/Subida en tiempo real y porcentaje de actividad del disco.
+- **Rendimiento Asíncrono:** La lectura de hardware se realiza en segundo plano sin congelar ni ralentizar el hilo de la interfaz gráfica.
+- **Diseño Moderno & Temas:** Soporte para modo Oscuro Minimalista y tema SpeedRunners.
+- **Ventana Flotante:** Sin bordes, arrastrable, transparencia configurable y modo Siempre Encima (`Topmost`).
+- **Atajo Global Configurable:** Ocultar o mostrar rápidamente el widget (por defecto `Ctrl + Shift + M`).
+- **Inicio Automático con Windows:** Configuración con privilegios elevados vía Programador de Tareas o Registro de Windows.
+- **100% Nativo:** Sin Electron, sin consumo excesivo de RAM y sin requerir conexión a Internet.
 
-## Requisitos para compilar
+---
 
-- Windows 10/11.
-- .NET 10 SDK.
-- Visual Studio Code.
-- Extensión "C# Dev Kit" de Microsoft (recomendada).
+## Compilación y Empaquetado Optimizado
 
-## Compilar
+Se incluye el script interactivo `build_all.bat` para compilar con un solo clic.
 
-Abrir una terminal en esta carpeta:
+### Modos de compilación disponibles:
 
-```powershell
-dotnet restore
-dotnet build
-```
+1. **Versión Ligera (Framework-Dependent Single-File, ~2 - 4 MB):**
+   ```powershell
+   dotnet publish CPUMonitor.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:SatelliteResourceLanguages="en-US;es" -o publish
+   ```
 
-Para generar un EXE independiente:
+2. **Versión Standalone (Self-Contained Single-File Comprimido, ~45 - 55 MB):**
+   ```powershell
+   dotnet publish CPUMonitor.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:SatelliteResourceLanguages="en-US;es" -o publish
+   ```
 
-```powershell
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
-```
-
-El ejecutable estará en:
-
+El ejecutable optimizado se generará en:
 ```text
 publish\CPUMonitor.exe
 ```
 
-## Inicio con Windows
+---
 
-Desde el widget:
+## Permisos de Administrador y Sensores
 
-1. Pulsar ⚙.
-2. Activar "Iniciar automáticamente con Windows".
-3. Guardar.
-
-La aplicación crea una entrada en:
-
-`HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
-
-No necesita permisos de administrador.
-
-## Atajo
-
-Por defecto:
-
-`Ctrl + Shift + M`
-
-Para cambiarlo:
-
-1. Pulsar ⚙.
-2. Hacer clic en el campo del atajo.
-3. Presionar la combinación deseada.
-4. Guardar.
-
-La combinación debe incluir Ctrl, Alt, Shift o Windows.
-
-## Nota
-
-El botón X oculta/cierra el programa de forma intencional. El atajo permite volver a mostrarlo si fue ocultado con la combinación.
+- Para la lectura precisa y completa de los registros MSR de la CPU (temperatura interna del silicio Intel/AMD), Windows requiere permisos de administrador para cargar el controlador de bajo nivel de LibreHardwareMonitor.
+- El archivo `app.manifest` ya solicita elevación automática (`requireAdministrator`).
+- En caso de ejecutarse sin permisos de administrador, el monitor activa automáticamente los sensores de GPU y los fallbacks ACPI/WMI del sistema.

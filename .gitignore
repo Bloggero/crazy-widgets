@@ -35,7 +35,24 @@ ENV/
 # IDEs & OS files
 .idea/
 .vscode/
+.vs/
 *.log
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# .NET / C# Build Artifacts
+[Bb]in/
+[Oo]bj/
+[Aa]pp[Pp]ackages/
+[Pp]ackages/
+_UpgradeReport_Files/
+Backup*/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+publish/
+[Pp]ublish*/
+*.nupkg
+*.snupkg

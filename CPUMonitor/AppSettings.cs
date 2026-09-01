@@ -11,9 +11,9 @@ public sealed class AppSettings
 
     public bool StartWithWindows { get; set; } = false;
 
-    public double Left { get; set; } = -1;
+    public double Left { get; set; } = double.NaN;
 
-    public double Top { get; set; } = -1;
+    public double Top { get; set; } = double.NaN;
 
     // =========================================
     // INDICADORES
