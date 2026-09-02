@@ -115,29 +115,6 @@ public partial class MainWindow : Window
         {
             var stats = await Task.Run(() => _monitor.GetStats());
 
-            // Actualizar Tooltip del icono en bandeja (CPU y RAM)
-            if (_notifyIcon != null)
-            {
-                string tip = $"CPU: {stats.CpuUsage:0}%";
-                if (stats.CpuTemperature > 0)
-                {
-                    tip += $" ({stats.CpuTemperature:0}°C)";
-                }
-                tip += $" | RAM: {stats.RamUsage:0}% ({stats.UsedRamGb:0.1}/{stats.TotalRamGb:0.0} GB)";
-
-                // Límite de caracteres en NotifyIcon.Text
-                if (tip.Length > 63)
-                {
-                    tip = $"CPU: {stats.CpuUsage:0}% | RAM: {stats.RamUsage:0}% ({stats.UsedRamGb:0.1} GB)";
-                }
-                if (tip.Length > 63)
-                {
-                    tip = tip.Substring(0, 63);
-                }
-
-                _notifyIcon.Text = tip;
-            }
-
             // CPU
             CpuText.Text = $"{stats.CpuUsage:0}%";
 
@@ -145,34 +122,24 @@ public partial class MainWindow : Window
             if (stats.CpuTemperature > 0)
             {
                 CpuTemperatureText.Text = $"{stats.CpuTemperature:0}°C";
-                string tooltipText = $"Temperatura: {stats.CpuTemperature:0.1}°C\nFuente: {stats.TemperatureSource}";
-                if (stats.GpuTemperature > 0)
-                {
-                    tooltipText += $"\nGPU: {stats.GpuTemperature:0.1}°C";
-                }
-                CpuPanel.ToolTip = tooltipText;
                 UpdateTemperatureColor(stats.CpuTemperature);
             }
             else
             {
                 CpuTemperatureText.Text = "--°C";
-                CpuPanel.ToolTip = $"Sin lectura de temperatura.\n{stats.TemperatureSource}\nEjecutar como Administrador para lectura completa de hardware.";
                 CpuTemperatureText.Foreground = Brushes.White;
             }
 
             // RAM
             RamText.Text = $"{stats.RamUsage:0}%";
             RamDetailsText.Text = $"{stats.UsedRamGb:0.0} / {stats.TotalRamGb:0.0} GB";
-            RamPanel.ToolTip = $"RAM: {stats.RamUsage:0}% ({stats.UsedRamGb:0.2} GB de {stats.TotalRamGb:0.2} GB)";
 
             // NETWORK
             DownloadText.Text = $"↓ {FormatNetworkSpeed(stats.DownloadMbps)}";
             UploadText.Text = $"↑ {FormatNetworkSpeed(stats.UploadMbps)}";
-            NetworkPanel.ToolTip = $"Descarga: {FormatNetworkSpeed(stats.DownloadMbps)}\nSubida: {FormatNetworkSpeed(stats.UploadMbps)}";
 
             // DISK
             DiskText.Text = $"{stats.DiskUsage:0}%";
-            DiskPanel.ToolTip = $"Actividad de Disco: {stats.DiskUsage:0}%";
         }
         catch
         {
@@ -197,7 +164,6 @@ public partial class MainWindow : Window
             MonthlyNetworkTotalText.Text = PerformanceMonitor.FormatDataSize(stats.TotalGb);
             MonthlyDownloadText.Text = $"↓ Descarga: {PerformanceMonitor.FormatDataSize(stats.DownloadGb)}";
             MonthlyUploadText.Text = $"↑ Subida: {PerformanceMonitor.FormatDataSize(stats.UploadGb)}";
-            MonthlyNetworkContainer.ToolTip = stats.DetailsTooltip;
         }
         catch
         {
