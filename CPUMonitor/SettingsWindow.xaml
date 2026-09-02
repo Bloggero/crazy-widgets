@@ -119,6 +119,9 @@
                                   VerticalContentAlignment="Center">
                             <ComboBoxItem Content="Oscuro (Por defecto)" Tag="Default"/>
                             <ComboBoxItem Content="SpeedRunners" Tag="SpeedRunners"/>
+                            <ComboBoxItem Content="Windows XP (Luna)" Tag="WindowsXP"/>
+                            <ComboBoxItem Content="Windows 7 (Aero Glass)" Tag="Windows7"/>
+                            <ComboBoxItem Content="Windows 10 (Modern Metro)" Tag="Windows10"/>
                         </ComboBox>
 
                     </StackPanel>

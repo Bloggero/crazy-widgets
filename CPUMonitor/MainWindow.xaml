@@ -13,6 +13,35 @@
         Loaded="Window_Loaded"
         Closing="Window_Closing">
 
+    <Window.Resources>
+        <Style x:Key="WindowButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Border x:Name="RootBorder"
             Margin="7"
             CornerRadius="18"
@@ -43,7 +72,29 @@
                         CornerRadius="17"/>
             </Border>
 
-            <Grid Margin="12,10,12,12">
+            <!-- Capa de brillo Aero Glass (Windows 7) -->
+            <Border x:Name="AeroGlassOverlay"
+                    CornerRadius="12"
+                    ClipToBounds="True"
+                    Visibility="Collapsed"
+                    IsHitTestVisible="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.45*"/>
+                        <RowDefinition Height="0.55*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" CornerRadius="11,11,0,0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#3DFFFFFF" Offset="0.0"/>
+                                <GradientStop Color="#08FFFFFF" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Grid x:Name="MainContentGrid" Margin="12,10,12,12">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -59,66 +110,77 @@
             <!-- HEADER -->
             <!-- ========================================= -->
 
-            <Grid Grid.Row="0" Margin="2,0,2,6">
+            <Border x:Name="HeaderBorder"
+                    Grid.Row="0"
+                    CornerRadius="0"
+                    Padding="2,0,2,6"
+                    Margin="0,0,0,0">
+                <Grid>
+                    <StackPanel x:Name="HeaderTitlePanel"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
 
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
+                        <TextBlock x:Name="HeaderTitle1"
+                                   Text="SYSTEM"
+                                   Foreground="White"
+                                   FontSize="13"
+                                   FontWeight="Black"/>
 
-                    <TextBlock Text="SYSTEM"
-                               Foreground="White"
-                               FontSize="13"
-                               FontWeight="Black"/>
+                        <TextBlock x:Name="HeaderTitleSep"
+                                   Text=" // "
+                                   Foreground="#666666"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
 
-                    <TextBlock Text=" // "
-                               Foreground="#666666"
-                               FontSize="12"
-                               FontWeight="Bold"/>
+                        <TextBlock x:Name="HeaderTitle2"
+                                   Text="MONITOR"
+                                   Foreground="#999999"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"/>
 
-                    <TextBlock Text="MONITOR"
-                               Foreground="#999999"
-                               FontSize="11"
-                               FontWeight="SemiBold"/>
-
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
 
-                    <Button x:Name="SettingsButton"
-                            Content="⚙"
-                            Width="26"
-                            Height="24"
-                            Margin="0,0,2,0"
-                            Click="SettingsButton_Click"
-                            Background="Transparent"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontSize="13"
-                            FontWeight="Bold"
-                            Cursor="Hand"/>
+                        <Button x:Name="SettingsButton"
+                                Style="{StaticResource WindowButtonStyle}"
+                                Content="⚙"
+                                Width="26"
+                                Height="24"
+                                Margin="0,0,2,0"
+                                Click="SettingsButton_Click"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Cursor="Hand"/>
 
-                    <Button Content="×"
-                            Width="26"
-                            Height="24"
-                            Click="CloseButton_Click"
-                            Background="Transparent"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Cursor="Hand"/>
+                        <Button x:Name="CloseButton"
+                                Style="{StaticResource WindowButtonStyle}"
+                                Content="×"
+                                Width="26"
+                                Height="24"
+                                Click="CloseButton_Click"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Cursor="Hand"/>
 
-                </StackPanel>
+                    </StackPanel>
 
-            </Grid>
+                </Grid>
+            </Border>
 
 
             <!-- ========================================= -->
-            <!-- LINEA -->
+            <!-- LINEA SEPARADORA -->
             <!-- ========================================= -->
 
-            <Rectangle Grid.Row="1"
+            <Rectangle x:Name="HeaderSeparator"
+                       Grid.Row="1"
                        Height="1"
                        Fill="#333333"
                        Margin="0,0,0,8"/>
@@ -143,13 +205,15 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="Red (30 días):"
+                        <TextBlock x:Name="MonthlyNetworkHeaderLabel"
+                                   Text="Red (30 días):"
                                    Foreground="#9E9E9E"
                                    FontSize="9.5"
                                    FontWeight="Bold"/>
 
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                            <TextBlock Text="Total: "
+                            <TextBlock x:Name="MonthlyNetworkTotalLabel"
+                                       Text="Total: "
                                        Foreground="#888888"
                                        FontSize="11"
                                        FontWeight="SemiBold"/>
@@ -226,13 +290,15 @@
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center">
 
-                    <Ellipse Width="91"
+                    <Ellipse x:Name="CpuOuterShape"
+                             Width="91"
                              Height="91"
                              Fill="#151515"
                              Stroke="#4A4A4A"
                              StrokeThickness="2"/>
 
-                    <Ellipse Width="82"
+                    <Ellipse x:Name="CpuInnerShape"
+                             Width="82"
                              Height="82"
                              Fill="Transparent"
                              Stroke="#292929"
@@ -241,7 +307,8 @@
                     <StackPanel HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
 
-                        <TextBlock Text="CPU"
+                        <TextBlock x:Name="CpuLabel"
+                                   Text="CPU"
                                    Foreground="#888888"
                                    FontSize="9"
                                    FontWeight="Bold"
@@ -279,13 +346,15 @@
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center">
 
-                    <Ellipse Width="91"
+                    <Ellipse x:Name="RamOuterShape"
+                             Width="91"
                              Height="91"
                              Fill="#151515"
                              Stroke="#4A4A4A"
                              StrokeThickness="2"/>
 
-                    <Ellipse Width="82"
+                    <Ellipse x:Name="RamInnerShape"
+                             Width="82"
                              Height="82"
                              Fill="Transparent"
                              Stroke="#292929"
@@ -294,7 +363,8 @@
                     <StackPanel HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
 
-                        <TextBlock Text="RAM"
+                        <TextBlock x:Name="RamLabel"
+                                   Text="RAM"
                                    Foreground="#888888"
                                    FontSize="9"
                                    FontWeight="Bold"
@@ -332,13 +402,15 @@
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center">
 
-                    <Ellipse Width="91"
+                    <Ellipse x:Name="NetworkOuterShape"
+                             Width="91"
                              Height="91"
                              Fill="#151515"
                              Stroke="#4A4A4A"
                              StrokeThickness="2"/>
 
-                    <Ellipse Width="82"
+                    <Ellipse x:Name="NetworkInnerShape"
+                             Width="82"
                              Height="82"
                              Fill="Transparent"
                              Stroke="#292929"
@@ -347,7 +419,8 @@
                     <StackPanel HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
 
-                        <TextBlock Text="NETWORK"
+                        <TextBlock x:Name="NetworkLabel"
+                                   Text="NETWORK"
                                    Foreground="#888888"
                                    FontSize="8"
                                    FontWeight="Bold"
@@ -385,13 +458,15 @@
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center">
 
-                    <Ellipse Width="91"
+                    <Ellipse x:Name="DiskOuterShape"
+                             Width="91"
                              Height="91"
                              Fill="#151515"
                              Stroke="#4A4A4A"
                              StrokeThickness="2"/>
 
-                    <Ellipse Width="82"
+                    <Ellipse x:Name="DiskInnerShape"
+                             Width="82"
                              Height="82"
                              Fill="Transparent"
                              Stroke="#292929"
@@ -400,7 +475,8 @@
                     <StackPanel HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
 
-                        <TextBlock Text="DISK"
+                        <TextBlock x:Name="DiskLabel"
+                                   Text="DISK"
                                    Foreground="#888888"
                                    FontSize="9"
                                    FontWeight="Bold"
@@ -413,7 +489,8 @@
                                    FontWeight="Black"
                                    HorizontalAlignment="Center"/>
 
-                        <TextBlock Text="ACTIVE"
+                        <TextBlock x:Name="DiskSubLabel"
+                                   Text="ACTIVE"
                                    Foreground="#555555"
                                    FontSize="8"
                                    FontWeight="Bold"
