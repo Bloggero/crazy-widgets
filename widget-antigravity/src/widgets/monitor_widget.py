@@ -113,8 +113,8 @@ class SAOGroupCard(QFrame):
 
     def _init_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(12, 8, 12, 8)
-        layout.setSpacing(6)
+        layout.setContentsMargins(6, 4, 6, 4)
+        layout.setSpacing(3)
 
         # Group Header
         header_row = QHBoxLayout()
@@ -172,12 +172,12 @@ class MonitorWidget(QWidget):
             Qt.WindowType.SubWindow
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
-        self.setMinimumWidth(380)
+        self.setMinimumWidth(240)
 
         # Multi-monitor safe initial placement
         saved_x = self._config.get("window_x")
         saved_y = self._config.get("window_y")
-        safe_x, safe_y = self._config.sanitize_coordinates(saved_x, saved_y, 420, 530)
+        safe_x, safe_y = self._config.sanitize_coordinates(saved_x, saved_y, 265, 345)
         self.move(safe_x, safe_y)
 
         self._init_ui()
@@ -198,10 +198,10 @@ class MonitorWidget(QWidget):
         self._header = QFrame(self._container)
         self._header.setObjectName("HeaderBar")
         header_layout = QHBoxLayout(self._header)
-        header_layout.setContentsMargins(10, 6, 8, 6)
-        header_layout.setSpacing(6)
+        header_layout.setContentsMargins(6, 4, 6, 4)
+        header_layout.setSpacing(3)
 
-        title_lbl = QLabel("⚔ SAO // AG QUOTA MONITOR", self._header)
+        title_lbl = QLabel("⚔ SAO // AG QUOTA", self._header)
         title_lbl.setObjectName("AppTitle")
         header_layout.addWidget(title_lbl)
         header_layout.addStretch()
@@ -210,35 +210,35 @@ class MonitorWidget(QWidget):
         self._history_btn = QPushButton("📊", self._header)
         self._history_btn.setObjectName("HeaderBtn")
         self._history_btn.setToolTip("SAO Tactical Quota Chart")
-        self._history_btn.setFixedSize(24, 24)
+        self._history_btn.setFixedSize(20, 20)
         self._history_btn.clicked.connect(self._toggle_history_chart)
         header_layout.addWidget(self._history_btn)
 
         compact_btn = QPushButton("🗗", self._header)
         compact_btn.setObjectName("HeaderBtn")
         compact_btn.setToolTip("Switch to Mini HUD Pill")
-        compact_btn.setFixedSize(24, 24)
+        compact_btn.setFixedSize(20, 20)
         compact_btn.clicked.connect(self.compact_requested.emit)
         header_layout.addWidget(compact_btn)
 
         settings_btn = QPushButton("⚙", self._header)
         settings_btn.setObjectName("HeaderBtn")
         settings_btn.setToolTip("SAO System Settings")
-        settings_btn.setFixedSize(24, 24)
+        settings_btn.setFixedSize(20, 20)
         settings_btn.clicked.connect(self.settings_requested.emit)
         header_layout.addWidget(settings_btn)
 
         min_btn = QPushButton("—", self._header)
         min_btn.setObjectName("HeaderBtn")
         min_btn.setToolTip("Minimize to Tray")
-        min_btn.setFixedSize(24, 24)
+        min_btn.setFixedSize(20, 20)
         min_btn.clicked.connect(self.hide)
         header_layout.addWidget(min_btn)
 
         close_btn = QPushButton("✕", self._header)
         close_btn.setObjectName("CloseBtn")
         close_btn.setToolTip("Close Monitor")
-        close_btn.setFixedSize(24, 24)
+        close_btn.setFixedSize(20, 20)
         close_btn.clicked.connect(self.close_requested.emit)
         header_layout.addWidget(close_btn)
 
@@ -249,7 +249,7 @@ class MonitorWidget(QWidget):
         self._user_bar.setObjectName("UserBar")
         user_layout = QHBoxLayout(self._user_bar)
         user_layout.setContentsMargins(10, 4, 10, 4)
-        user_layout.setSpacing(6)
+        user_layout.setSpacing(3)
 
         self._user_lbl = QLabel("PLAYER: CONNECTING...", self._user_bar)
         self._user_lbl.setObjectName("UserNameLabel")
@@ -276,8 +276,8 @@ class MonitorWidget(QWidget):
         self._cards_container = QWidget(self._container)
         self._cards_container.setObjectName("CardsContainer")
         self._cards_layout = QVBoxLayout(self._cards_container)
-        self._cards_layout.setContentsMargins(8, 6, 8, 6)
-        self._cards_layout.setSpacing(6)
+        self._cards_layout.setContentsMargins(4, 4, 4, 4)
+        self._cards_layout.setSpacing(3)
         container_layout.addWidget(self._cards_container)
 
         # 5. History Chart Widget
@@ -289,7 +289,7 @@ class MonitorWidget(QWidget):
         self._footer = QFrame(self._container)
         self._footer.setObjectName("FooterBar")
         footer_layout = QHBoxLayout(self._footer)
-        footer_layout.setContentsMargins(10, 6, 10, 6)
+        footer_layout.setContentsMargins(6, 3, 6, 3)
         footer_layout.setSpacing(8)
 
         status_vbox = QVBoxLayout()

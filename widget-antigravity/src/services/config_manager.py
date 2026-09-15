@@ -22,8 +22,8 @@ DEFAULT_CONFIG = {
     "theme": "dark",
     "window_x": None,
     "window_y": None,
-    "window_width": 420,
-    "window_height": 530,
+    "window_width": 265,
+    "window_height": 345,
     "hidden_buckets": [],
     "enable_notifications": True,
     "warning_threshold": 30,
@@ -60,8 +60,7 @@ class ConfigManager:
                 self._logger.warning(f"Error reading config: {e}. Using defaults.")
         
         # Ensure default width is at least 380 for proper layout
-        if not config.get("window_width") or config["window_width"] < 380:
-            config["window_width"] = 420
+        if not config.get("window_width") or config["window_width"] > 300: config["window_width"] = 265
         # Sanity check for interval
         if config.get("update_interval_sec", 300) < 15:
             config["update_interval_sec"] = 15
@@ -150,7 +149,7 @@ class ConfigManager:
             "height": self.get("window_height", 530),
         }
 
-    def sanitize_coordinates(self, x: Optional[int], y: Optional[int], width: int = 420, height: int = 530) -> Tuple[int, int]:
+    def sanitize_coordinates(self, x: Optional[int], y: Optional[int], width: int = 265, height: int = 345) -> Tuple[int, int]:
         """
         Validates whether (x, y) is visible within any currently connected screen.
         If off-screen or None (e.g. disconnected monitor), re-centers on the primary screen.
@@ -186,8 +185,8 @@ class ConfigManager:
     def save_window_geometry(self, x: int, y: int, width: int, height: int):
         self._config["window_x"] = x
         self._config["window_y"] = y
-        self._config["window_width"] = max(380, width)
-        self._config["window_height"] = max(400, height)
+        self._config["window_width"] = max(240, width)
+        self._config["window_height"] = max(280, height)
         self.save()
 
     @property
