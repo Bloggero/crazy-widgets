@@ -150,7 +150,24 @@
                                   Foreground="#1F2937"
                                   FontSize="13"
                                   FontWeight="Normal"
-                                  Margin="0,0,0,8"/>
+                                  Margin="0,0,0,6"
+                                  Checked="MonthlyNetworkCheck_Changed"
+                                  Unchecked="MonthlyNetworkCheck_Changed"/>
+
+                        <StackPanel x:Name="MonthlyNetworkModePanel"
+                                    Margin="22,0,0,10">
+                            <RadioButton x:Name="MonthlyNetworkActiveRadio"
+                                         GroupName="MonthlyNetworkMode"
+                                         Content="Medir únicamente la red activa actual (recomendado)"
+                                         Foreground="#4B5563"
+                                         FontSize="12"
+                                         Margin="0,0,0,4"/>
+                            <RadioButton x:Name="MonthlyNetworkAllRadio"
+                                         GroupName="MonthlyNetworkMode"
+                                         Content="Sumar todas las redes del equipo (histórico global)"
+                                         Foreground="#4B5563"
+                                         FontSize="12"/>
+                        </StackPanel>
 
                         <CheckBox x:Name="NetworkCheck"
                                   Content="Mostrar velocidad de red en tiempo real"

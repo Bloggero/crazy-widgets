@@ -54,6 +54,9 @@ public partial class SettingsWindow : Window
             ShowMonthlyNetwork =
                 settings.ShowMonthlyNetwork,
 
+            MonthlyNetworkOnlyActiveProfile =
+                settings.MonthlyNetworkOnlyActiveProfile,
+
             ShowCpuUptime =
                 settings.ShowCpuUptime,
 
@@ -102,6 +105,18 @@ public partial class SettingsWindow : Window
 
         MonthlyNetworkCheck.IsChecked =
             Settings.ShowMonthlyNetwork;
+
+        MonthlyNetworkActiveRadio.IsChecked =
+            Settings.MonthlyNetworkOnlyActiveProfile;
+
+        MonthlyNetworkAllRadio.IsChecked =
+            !Settings.MonthlyNetworkOnlyActiveProfile;
+
+        if (MonthlyNetworkModePanel != null)
+        {
+            MonthlyNetworkModePanel.IsEnabled =
+                Settings.ShowMonthlyNetwork;
+        }
 
         NetworkCheck.IsChecked =
             Settings.ShowNetwork;
@@ -313,6 +328,9 @@ public partial class SettingsWindow : Window
         Settings.ShowMonthlyNetwork =
             MonthlyNetworkCheck.IsChecked == true;
 
+        Settings.MonthlyNetworkOnlyActiveProfile =
+            MonthlyNetworkActiveRadio.IsChecked == true;
+
         Settings.ShowCpuUptime =
             CpuUptimeCheck.IsChecked == true;
 
@@ -336,6 +354,17 @@ public partial class SettingsWindow : Window
         DialogResult = true;
     }
 
+
+    private void MonthlyNetworkCheck_Changed(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (MonthlyNetworkModePanel != null)
+        {
+            MonthlyNetworkModePanel.IsEnabled =
+                MonthlyNetworkCheck.IsChecked == true;
+        }
+    }
 
     private void Cancel_Click(
         object sender,

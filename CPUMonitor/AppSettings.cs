@@ -29,6 +29,8 @@ public sealed class AppSettings
 
     public bool ShowCpuUptime { get; set; } = true;
 
+    public bool MonthlyNetworkOnlyActiveProfile { get; set; } = true;
+
 
     // =========================================
     // TEMA

@@ -268,11 +268,12 @@ public sealed class PerformanceMonitor : IDisposable
     // =========================================
     // CONSUMO DE RED DE LOS ÚLTIMOS 30 DÍAS
     // =========================================
-    public static async Task<MonthlyNetworkStats> GetLast30DaysNetworkUsageAsync()
+    public static async Task<MonthlyNetworkStats> GetLast30DaysNetworkUsageAsync(bool onlyActiveProfile = true)
     {
         double totalDownloadBytes = 0;
         double totalUploadBytes = 0;
         var profileDetails = new List<string>();
+        string activeProfileName = string.Empty;
 
         try
         {
@@ -285,46 +286,71 @@ public sealed class PerformanceMonitor : IDisposable
                 Shared = Windows.Networking.Connectivity.TriStates.DoNotCare
             };
 
-            var profiles = Windows.Networking.Connectivity.NetworkInformation.GetConnectionProfiles();
+            IEnumerable<Windows.Networking.Connectivity.ConnectionProfile> profilesToQuery;
 
-            if (profiles != null)
+            if (onlyActiveProfile)
             {
-                foreach (var profile in profiles)
+                var active = Windows.Networking.Connectivity.NetworkInformation.GetInternetConnectionProfile();
+                if (active != null)
                 {
-                    try
+                    activeProfileName = active.ProfileName;
+                    profilesToQuery = new[] { active };
+                }
+                else
+                {
+                    var all = Windows.Networking.Connectivity.NetworkInformation.GetConnectionProfiles();
+                    var connected = all?.FirstOrDefault(p => p.GetNetworkConnectivityLevel() != Windows.Networking.Connectivity.NetworkConnectivityLevel.None);
+                    if (connected != null)
                     {
-                        var usages = await profile.GetNetworkUsageAsync(
-                            startTime,
-                            endTime,
-                            Windows.Networking.Connectivity.DataUsageGranularity.Total,
-                            usageStates);
+                        activeProfileName = connected.ProfileName;
+                        profilesToQuery = new[] { connected };
+                    }
+                    else
+                    {
+                        profilesToQuery = all ?? Array.Empty<Windows.Networking.Connectivity.ConnectionProfile>();
+                    }
+                }
+            }
+            else
+            {
+                profilesToQuery = Windows.Networking.Connectivity.NetworkInformation.GetConnectionProfiles() ?? Array.Empty<Windows.Networking.Connectivity.ConnectionProfile>();
+            }
 
-                        ulong profileRx = 0;
-                        ulong profileTx = 0;
+            foreach (var profile in profilesToQuery)
+            {
+                try
+                {
+                    var usages = await profile.GetNetworkUsageAsync(
+                        startTime,
+                        endTime,
+                        Windows.Networking.Connectivity.DataUsageGranularity.Total,
+                        usageStates);
 
-                        if (usages != null)
+                    ulong profileRx = 0;
+                    ulong profileTx = 0;
+
+                    if (usages != null)
+                    {
+                        foreach (var usage in usages)
                         {
-                            foreach (var usage in usages)
-                            {
-                                profileRx += usage.BytesReceived;
-                                profileTx += usage.BytesSent;
-                            }
-                        }
-
-                        if (profileRx > 0 || profileTx > 0)
-                        {
-                            totalDownloadBytes += profileRx;
-                            totalUploadBytes += profileTx;
-
-                            double pRxGb = profileRx / (1024.0 * 1024 * 1024);
-                            double pTxGb = profileTx / (1024.0 * 1024 * 1024);
-                            double pTotalGb = pRxGb + pTxGb;
-                            profileDetails.Add($"• {profile.ProfileName}: {FormatDataSize(pTotalGb)} (↓{FormatDataSize(pRxGb)} / ↑{FormatDataSize(pTxGb)})");
+                            profileRx += usage.BytesReceived;
+                            profileTx += usage.BytesSent;
                         }
                     }
-                    catch
+
+                    if (profileRx > 0 || profileTx > 0)
                     {
+                        totalDownloadBytes += profileRx;
+                        totalUploadBytes += profileTx;
+
+                        double pRxGb = profileRx / (1024.0 * 1024 * 1024);
+                        double pTxGb = profileTx / (1024.0 * 1024 * 1024);
+                        double pTotalGb = pRxGb + pTxGb;
+                        profileDetails.Add($"• {profile.ProfileName}: {FormatDataSize(pTotalGb)} (↓{FormatDataSize(pRxGb)} / ↑{FormatDataSize(pTxGb)})");
                     }
+                }
+                catch
+                {
                 }
             }
         }
@@ -336,13 +362,17 @@ public sealed class PerformanceMonitor : IDisposable
         double totalUlGb = totalUploadBytes / (1024.0 * 1024 * 1024);
         double totalGb = totalDlGb + totalUlGb;
 
-        string tooltip = $"Red (30 días):\nTotal: {FormatDataSize(totalGb)}\n↓ Descarga: {FormatDataSize(totalDlGb)}\n↑ Subida: {FormatDataSize(totalUlGb)}";
+        string title = onlyActiveProfile && !string.IsNullOrEmpty(activeProfileName)
+            ? $"Red ({activeProfileName}):"
+            : "Red (30 días):";
+
+        string tooltip = $"{title}\nTotal: {FormatDataSize(totalGb)}\n↓ Descarga: {FormatDataSize(totalDlGb)}\n↑ Subida: {FormatDataSize(totalUlGb)}";
         if (profileDetails.Count > 0)
         {
             tooltip += "\n\nPor interfaz:\n" + string.Join("\n", profileDetails);
         }
 
-        return new MonthlyNetworkStats(totalDlGb, totalUlGb, totalGb, tooltip);
+        return new MonthlyNetworkStats(totalDlGb, totalUlGb, totalGb, tooltip, activeProfileName);
     }
 
     public static string FormatDataSize(double gigabytes)
@@ -705,7 +735,8 @@ public readonly record struct MonthlyNetworkStats(
     double DownloadGb,
     double UploadGb,
     double TotalGb,
-    string DetailsTooltip);
+    string DetailsTooltip,
+    string ActiveProfileName = "");
 
 // =============================================
 // VISITOR REUTILIZABLE (ZERO ALLOC)

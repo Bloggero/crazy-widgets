@@ -164,8 +164,15 @@ public partial class MainWindow : Window
     {
         try
         {
-            var stats = await PerformanceMonitor.GetLast30DaysNetworkUsageAsync();
+            var stats = await PerformanceMonitor.GetLast30DaysNetworkUsageAsync(_settings.MonthlyNetworkOnlyActiveProfile);
             _hasMonthlyData = true;
+
+            if (MonthlyNetworkHeaderLabel != null)
+            {
+                MonthlyNetworkHeaderLabel.Text = _settings.MonthlyNetworkOnlyActiveProfile
+                    ? "Red activa (30 d):"
+                    : "Red (30 días):";
+            }
 
             MonthlyNetworkTotalText.Text = PerformanceMonitor.FormatDataSize(stats.TotalGb);
             MonthlyDownloadText.Text = $"↓ Descarga: {PerformanceMonitor.FormatDataSize(stats.DownloadGb)}";
@@ -1017,6 +1024,8 @@ public partial class MainWindow : Window
             _settingsManager.Save(_settings);
             ApplySettings();
             RegisterHotkey();
+            _hasMonthlyData = false;
+            _ = UpdateMonthlyNetworkStatsAsync();
         }
 
         _settingsOpen = false;
