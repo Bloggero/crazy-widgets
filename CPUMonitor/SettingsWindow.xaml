@@ -159,6 +159,13 @@
                                   FontWeight="Normal"
                                   Margin="0,0,0,8"/>
 
+                        <CheckBox x:Name="CpuUptimeCheck"
+                                  Content="Mostrar tiempo activo del CPU"
+                                  Foreground="#1F2937"
+                                  FontSize="13"
+                                  FontWeight="Normal"
+                                  Margin="0,0,0,8"/>
+
                         <CheckBox x:Name="DiskCheck"
                                   Content="Mostrar uso del disco"
                                   Foreground="#1F2937"

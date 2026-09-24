@@ -54,6 +54,9 @@ public partial class SettingsWindow : Window
             ShowMonthlyNetwork =
                 settings.ShowMonthlyNetwork,
 
+            ShowCpuUptime =
+                settings.ShowCpuUptime,
+
             Theme =
                 settings.Theme
         };
@@ -105,6 +108,9 @@ public partial class SettingsWindow : Window
 
         DiskCheck.IsChecked =
             Settings.ShowDisk;
+
+        CpuUptimeCheck.IsChecked =
+            Settings.ShowCpuUptime;
 
         HotkeyBox.Text =
             hotkeyText;
@@ -306,6 +312,9 @@ public partial class SettingsWindow : Window
 
         Settings.ShowMonthlyNetwork =
             MonthlyNetworkCheck.IsChecked == true;
+
+        Settings.ShowCpuUptime =
+            CpuUptimeCheck.IsChecked == true;
 
         if (ThemeComboBox.SelectedItem is System.Windows.Controls.ComboBoxItem selectedTheme &&
             selectedTheme.Tag is string themeTag)

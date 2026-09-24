@@ -310,22 +310,31 @@
                         <TextBlock x:Name="CpuLabel"
                                    Text="CPU"
                                    Foreground="#888888"
-                                   FontSize="9"
+                                   FontSize="8.5"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Center"/>
 
                         <TextBlock x:Name="CpuText"
                                    Text="0%"
                                    Foreground="White"
-                                   FontSize="21"
+                                   FontSize="19"
                                    FontWeight="Black"
+                                   Margin="0,-2,0,-1"
                                    HorizontalAlignment="Center"/>
 
                         <TextBlock x:Name="CpuTemperatureText"
                                    Text="--°C"
                                    Foreground="White"
-                                   FontSize="11"
+                                   FontSize="10"
                                    FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+
+                        <TextBlock x:Name="CpuUptimeText"
+                                   Text="0:00:00:00"
+                                   Foreground="#888888"
+                                   FontSize="8"
+                                   FontWeight="SemiBold"
+                                   Margin="0,1,0,0"
                                    HorizontalAlignment="Center"/>
 
                     </StackPanel>

@@ -118,6 +118,9 @@ public partial class MainWindow : Window
             // CPU
             CpuText.Text = $"{stats.CpuUsage:0}%";
 
+            // TIEMPO ACTIVO (UPTIME)
+            CpuUptimeText.Text = PerformanceMonitor.FormatUptime(stats.Uptime);
+
             // TEMPERATURA
             if (stats.CpuTemperature > 0)
             {
@@ -129,6 +132,9 @@ public partial class MainWindow : Window
                 CpuTemperatureText.Text = "--°C";
                 CpuTemperatureText.Foreground = Brushes.White;
             }
+
+            string tempDisplay = stats.CpuTemperature > 0 ? $"{stats.CpuTemperature:0}°C ({stats.TemperatureSource})" : "No disponible";
+            CpuPanel.ToolTip = $"CPU\n• Uso: {stats.CpuUsage:0}%\n• Temperatura: {tempDisplay}\n• Tiempo activo: {PerformanceMonitor.FormatUptime(stats.Uptime)} ({PerformanceMonitor.FormatUptimeFriendly(stats.Uptime)})";
 
             // RAM
             RamText.Text = $"{stats.RamUsage:0}%";
@@ -330,7 +336,8 @@ public partial class MainWindow : Window
         var subBrush = new SolidColorBrush(Color.FromRgb(0xAA, 0xAA, 0xAA));
 
         StyleIndicator(CpuOuterShape, CpuInnerShape, CpuLabel, CpuText, CpuTemperatureText,
-            outerFill, outerStroke, 2, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, Brushes.White, segoe);
+            outerFill, outerStroke, 2, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, Brushes.White, segoe,
+            CpuUptimeText, subBrush);
         StyleIndicator(RamOuterShape, RamInnerShape, RamLabel, RamText, RamDetailsText,
             outerFill, outerStroke, 2, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
         StyleIndicator(NetworkOuterShape, NetworkInnerShape, NetworkLabel, DownloadText, UploadText,
@@ -413,7 +420,8 @@ public partial class MainWindow : Window
         var subBrush = new SolidColorBrush(Color.FromRgb(0x93, 0xC5, 0xFD));
 
         StyleIndicator(CpuOuterShape, CpuInnerShape, CpuLabel, CpuText, CpuTemperatureText,
-            outerFill, outerStroke, 2, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
+            outerFill, outerStroke, 2, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe,
+            CpuUptimeText, subBrush);
         StyleIndicator(RamOuterShape, RamInnerShape, RamLabel, RamText, RamDetailsText,
             outerFill, outerStroke, 2, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
         StyleIndicator(NetworkOuterShape, NetworkInnerShape, NetworkLabel, DownloadText, UploadText,
@@ -498,7 +506,8 @@ public partial class MainWindow : Window
         var subBrush = new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44));
 
         StyleIndicator(CpuOuterShape, CpuInnerShape, CpuLabel, CpuText, CpuTemperatureText,
-            outerFill, outerStroke, 2, innerFill, innerStroke, 1, labelBrush, mainBrush, _normalTempBrush, tahoma);
+            outerFill, outerStroke, 2, innerFill, innerStroke, 1, labelBrush, mainBrush, _normalTempBrush, tahoma,
+            CpuUptimeText, subBrush);
         StyleIndicator(RamOuterShape, RamInnerShape, RamLabel, RamText, RamDetailsText,
             outerFill, outerStroke, 2, innerFill, innerStroke, 1, labelBrush, mainBrush, subBrush, tahoma);
         StyleIndicator(NetworkOuterShape, NetworkInnerShape, NetworkLabel, DownloadText, UploadText,
@@ -584,7 +593,8 @@ public partial class MainWindow : Window
         var subBrush = new SolidColorBrush(Color.FromRgb(0xA0, 0xE0, 0xFF));
 
         StyleIndicator(CpuOuterShape, CpuInnerShape, CpuLabel, CpuText, CpuTemperatureText,
-            outerFill, outerStroke, 2, innerFill, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
+            outerFill, outerStroke, 2, innerFill, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe,
+            CpuUptimeText, subBrush);
         StyleIndicator(RamOuterShape, RamInnerShape, RamLabel, RamText, RamDetailsText,
             outerFill, outerStroke, 2, innerFill, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
         StyleIndicator(NetworkOuterShape, NetworkInnerShape, NetworkLabel, DownloadText, UploadText,
@@ -667,7 +677,8 @@ public partial class MainWindow : Window
         var subBrush = new SolidColorBrush(Color.FromRgb(0x9E, 0x9E, 0x9E));
 
         StyleIndicator(CpuOuterShape, CpuInnerShape, CpuLabel, CpuText, CpuTemperatureText,
-            outerFill, outerStroke, 1.5, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
+            outerFill, outerStroke, 1.5, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe,
+            CpuUptimeText, subBrush);
         StyleIndicator(RamOuterShape, RamInnerShape, RamLabel, RamText, RamDetailsText,
             outerFill, outerStroke, 1.5, Brushes.Transparent, innerStroke, 1, labelBrush, Brushes.White, subBrush, segoe);
         StyleIndicator(NetworkOuterShape, NetworkInnerShape, NetworkLabel, DownloadText, UploadText,
@@ -691,7 +702,9 @@ public partial class MainWindow : Window
         Brush labelBrush,
         Brush mainBrush,
         Brush subBrush,
-        FontFamily font)
+        FontFamily font,
+        TextBlock? uptime = null,
+        Brush? uptimeBrush = null)
     {
         if (outer != null)
         {
@@ -723,6 +736,12 @@ public partial class MainWindow : Window
         {
             sub.Foreground = subBrush;
             sub.FontFamily = font;
+        }
+
+        if (uptime != null)
+        {
+            uptime.Foreground = uptimeBrush ?? subBrush;
+            uptime.FontFamily = font;
         }
     }
 
@@ -817,6 +836,26 @@ public partial class MainWindow : Window
             MonthlyNetworkContainer.Visibility = _settings.ShowMonthlyNetwork
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+        }
+
+        if (CpuUptimeText != null && CpuLabel != null && CpuText != null && CpuTemperatureText != null)
+        {
+            if (_settings.ShowCpuUptime)
+            {
+                CpuUptimeText.Visibility = Visibility.Visible;
+                CpuLabel.FontSize = 8.5;
+                CpuText.FontSize = 19;
+                CpuText.Margin = new Thickness(0, -2, 0, -1);
+                CpuTemperatureText.FontSize = 10;
+            }
+            else
+            {
+                CpuUptimeText.Visibility = Visibility.Collapsed;
+                CpuLabel.FontSize = 9;
+                CpuText.FontSize = 21;
+                CpuText.Margin = new Thickness(0);
+                CpuTemperatureText.FontSize = 11;
+            }
         }
 
         if (NetworkPanel == null || DiskPanel == null)
