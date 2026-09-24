@@ -152,6 +152,9 @@ public sealed class PerformanceMonitor : IDisposable
         // DISCO
         double diskUsage = GetDiskUsage();
 
+        // TIEMPO ACTIVO (UPTIME)
+        TimeSpan uptime = TimeSpan.FromMilliseconds(Environment.TickCount64);
+
         return new PerformanceStats(
             cpu,
             ram,
@@ -162,7 +165,8 @@ public sealed class PerformanceMonitor : IDisposable
             tempSource,
             downloadMbps,
             uploadMbps,
-            diskUsage);
+            diskUsage,
+            uptime);
     }
 
     // =========================================
@@ -350,6 +354,23 @@ public sealed class PerformanceMonitor : IDisposable
         if (gigabytes >= 1000)
             return $"{gigabytes / 1024:0.2} TB";
         return $"{gigabytes:0.1} GB";
+    }
+
+    public static string FormatUptime(TimeSpan uptime)
+    {
+        return $"{uptime.Days}:{uptime.Hours:D2}:{uptime.Minutes:D2}:{uptime.Seconds:D2}";
+    }
+
+    public static string FormatUptimeFriendly(TimeSpan uptime)
+    {
+        var parts = new List<string>();
+        if (uptime.Days > 0)
+            parts.Add($"{uptime.Days} {(uptime.Days == 1 ? "día" : "días")}");
+        if (uptime.Hours > 0 || uptime.Days > 0)
+            parts.Add($"{uptime.Hours} {(uptime.Hours == 1 ? "hora" : "horas")}");
+        parts.Add($"{uptime.Minutes} {(uptime.Minutes == 1 ? "minuto" : "minutos")}");
+        parts.Add($"{uptime.Seconds} {(uptime.Seconds == 1 ? "segundo" : "segundos")}");
+        return parts.Count > 0 ? string.Join(", ", parts) : "0 segundos";
     }
 
     // =========================================
@@ -677,7 +698,8 @@ public readonly record struct PerformanceStats(
     string TemperatureSource,
     double DownloadMbps,
     double UploadMbps,
-    double DiskUsage);
+    double DiskUsage,
+    TimeSpan Uptime);
 
 public readonly record struct MonthlyNetworkStats(
     double DownloadGb,

@@ -119,6 +119,9 @@
                                   VerticalContentAlignment="Center">
                             <ComboBoxItem Content="Oscuro (Por defecto)" Tag="Default"/>
                             <ComboBoxItem Content="SpeedRunners" Tag="SpeedRunners"/>
+                            <ComboBoxItem Content="Windows XP (Luna)" Tag="WindowsXP"/>
+                            <ComboBoxItem Content="Windows 7 (Aero Glass)" Tag="Windows7"/>
+                            <ComboBoxItem Content="Windows 10 (Modern Metro)" Tag="Windows10"/>
                         </ComboBox>
 
                     </StackPanel>
@@ -151,6 +154,13 @@
 
                         <CheckBox x:Name="NetworkCheck"
                                   Content="Mostrar velocidad de red en tiempo real"
+                                  Foreground="#1F2937"
+                                  FontSize="13"
+                                  FontWeight="Normal"
+                                  Margin="0,0,0,8"/>
+
+                        <CheckBox x:Name="CpuUptimeCheck"
+                                  Content="Mostrar tiempo activo del CPU"
                                   Foreground="#1F2937"
                                   FontSize="13"
                                   FontWeight="Normal"

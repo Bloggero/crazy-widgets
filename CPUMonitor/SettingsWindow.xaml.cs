@@ -1,5 +1,9 @@
 using System.Windows;
 using System.Windows.Input;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxButton = System.Windows.MessageBoxButton;
+using MessageBoxImage = System.Windows.MessageBoxImage;
 
 namespace CPUMonitor;
 
@@ -50,6 +54,9 @@ public partial class SettingsWindow : Window
             ShowMonthlyNetwork =
                 settings.ShowMonthlyNetwork,
 
+            ShowCpuUptime =
+                settings.ShowCpuUptime,
+
             Theme =
                 settings.Theme
         };
@@ -71,13 +78,26 @@ public partial class SettingsWindow : Window
         StartupCheck.IsChecked =
             Settings.StartWithWindows;
 
-        if (string.Equals(Settings.Theme, "SpeedRunners", StringComparison.OrdinalIgnoreCase))
+        switch (Settings.Theme?.Trim().ToLowerInvariant())
         {
-            ThemeComboBox.SelectedIndex = 1;
-        }
-        else
-        {
-            ThemeComboBox.SelectedIndex = 0;
+            case "speedrunners":
+                ThemeComboBox.SelectedIndex = 1;
+                break;
+            case "windowsxp":
+            case "xp":
+                ThemeComboBox.SelectedIndex = 2;
+                break;
+            case "windows7":
+            case "win7":
+                ThemeComboBox.SelectedIndex = 3;
+                break;
+            case "windows10":
+            case "win10":
+                ThemeComboBox.SelectedIndex = 4;
+                break;
+            default:
+                ThemeComboBox.SelectedIndex = 0;
+                break;
         }
 
         MonthlyNetworkCheck.IsChecked =
@@ -88,6 +108,9 @@ public partial class SettingsWindow : Window
 
         DiskCheck.IsChecked =
             Settings.ShowDisk;
+
+        CpuUptimeCheck.IsChecked =
+            Settings.ShowCpuUptime;
 
         HotkeyBox.Text =
             hotkeyText;
@@ -289,6 +312,9 @@ public partial class SettingsWindow : Window
 
         Settings.ShowMonthlyNetwork =
             MonthlyNetworkCheck.IsChecked == true;
+
+        Settings.ShowCpuUptime =
+            CpuUptimeCheck.IsChecked == true;
 
         if (ThemeComboBox.SelectedItem is System.Windows.Controls.ComboBoxItem selectedTheme &&
             selectedTheme.Tag is string themeTag)
